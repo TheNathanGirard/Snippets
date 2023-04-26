@@ -14,7 +14,9 @@ $strArray = @(
     "windirstat",
     "royalts-v6",
     "etcher",
-    "sysinternals"
+    "sysinternals",
+    "intel-bluetooth-drivers",
+    "intel-proset-drivers"
 )
 
 $testchoco = powershell choco -v
