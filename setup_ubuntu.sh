@@ -65,9 +65,9 @@ base_packages() {
 		dpkg -s $package &>/dev/null
 
 		if [ $? -eq 0 ]; then
-			echo -e "${GREEN}Package" $package "is installed.${NC}"
+			echo -e "${GREEN}Package $package is installed.${NC}"
 		else
-			echo -e "${RED}Package" $package "NOT installed!${NC}"
+			echo -e "${RED}Package $package NOT installed!${NC}"
 			apt install -y $package
 		fi
 	done
@@ -220,9 +220,9 @@ desktop_packages() {
 		dpkg -s $package &>/dev/null
 
 		if [ $? -eq 0 ]; then
-			echo -e "${GREEN}Package" $package "is installed.${NC}"
+			echo -e "${GREEN}Package $package is installed.${NC}"
 		else
-			echo -e "${RED}Package" $package "NOT installed!${NC}"
+			echo -e "${RED}Package $package NOT installed!${NC}"
 			apt install -y $package
 		fi
 	done
@@ -240,10 +240,10 @@ snap_packages() {
 
 }
 
-desktop_minimal() {
-        apt install -y gnome-shell gnome-core xinit
+vanilla_desktop() {
+        apt install -y vanilla-gnome-desktop
         while true; do
-    read -p "Which environment should start by default? GUI [G] or CLI [C]?" gc
+    read -rp "Which environment should start by default? GUI [G] or CLI [C]?" gc
     case $gc in
         [Gg]* ) break;;
         [Cc]* ) systemctl set-default multi-user.target; break;;
@@ -304,12 +304,13 @@ install_docker () {
 	
 	apt update
 
-	apt install -y docker-ce docker-ce-cli containerd.io docker-compose docker-compose-plugin qemu-user-static qemu-utils pass golang-docker-credential-helpers
+	apt install -y docker-ce docker-ce-cli containerd.io
+	# apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
 
-	git clone https://github.com/wagoodman/dive.git /tmp/dive
-	cd /tmp/dive
-	make
-	cp ./dist/dive_linux_amd64/dive /usr/bin
+	# git clone https://github.com/wagoodman/dive.git /tmp/dive
+	# cd /tmp/dive
+	# make
+	# cp ./dist/dive_linux_amd64/dive /usr/bin
 	
 #	wget https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb
 #	apt install ./dive_0.9.2_linux_amd64.deb
@@ -338,7 +339,7 @@ python_alias () {
 }
 
 while true; do
-    read -p "Install Base Packages? " yn
+    read -rp "Install Base Packages? " yn
     case $yn in
         [Yy]* ) base_packages; break;;
         [Nn]* ) break;;
@@ -347,7 +348,7 @@ while true; do
 done
 
 while true; do
-    read -p "Install Build / Development Packages? " yn
+    read -rp "Install Build / Development Packages? " yn
     case $yn in
         [Yy]* ) build_packages; break;;
         [Nn]* ) break;;
@@ -356,16 +357,16 @@ while true; do
 done
 
 while true; do
-    read -p "Install Minimal Desktop? " yn
+    read -rp "Install Vanilla Desktop? " yn
     case $yn in
-        [Yy]* ) desktop_minimal; break;;
+        [Yy]* ) vanilla_desktop; break;;
         [Nn]* ) break;;
         * ) echo -e "${RED}Please answer yes or no.${NC}";;
     esac
 done
 
 while true; do
-    read -p "Install Desktop Packages? " yn
+    read -rp "Install Desktop Packages? " yn
     case $yn in
         [Yy]* ) desktop_packages; break;;
         [Nn]* ) break;;
@@ -374,7 +375,7 @@ while true; do
 done
 
 while true; do
-    read -p "Install Snap Packages? " yn
+    read -rp "Install Snap Packages? " yn
     case $yn in
         [Yy]* ) snap_packages; break;;
         [Nn]* ) break;;
@@ -383,7 +384,7 @@ while true; do
 done
 
 while true; do
-    read -p "Harden SSH server? " yn
+    read -rp "Harden SSH server? " yn
     case $yn in
         [Yy]* ) harden_ssh; break;;
         [Nn]* ) break;;
@@ -392,7 +393,7 @@ while true; do
 done
 
 while true; do
-    read -p "Disable Password for all sudoers? " yn
+    read -rp "Disable Password for all sudoers? " yn
     case $yn in
         [Yy]* ) disable_sudo_pw; break;;
         [Nn]* ) break;;
@@ -401,7 +402,7 @@ while true; do
 done
 
 while true; do
-    read -p "Install NodeJS (Current)? " yn
+    read -rp "Install NodeJS (Current)? " yn
     case $yn in
         [Yy]* ) install_nodejs; break;;
         [Nn]* ) break;;
@@ -410,7 +411,7 @@ while true; do
 done
 
 while true; do
-    read -p "Install Powershell? " yn
+    read -rp "Install Powershell? " yn
     case $yn in
         [Yy]* ) install_powershell; break;;
         [Nn]* ) break;;
@@ -419,7 +420,7 @@ while true; do
 done
 
 while true; do
-    read -p "Install VMtools? " yn
+    read -rp "Install VMtools? " yn
     case $yn in
         [Yy]* ) install_vmtools; break;;
         [Nn]* ) break;;
@@ -428,7 +429,7 @@ while true; do
 done
 
 while true; do
-    read -p "Install Docker? " yn
+    read -rp "Install Docker? " yn
     case $yn in
         [Yy]* ) install_docker; break;;
         [Nn]* ) break;;
@@ -437,7 +438,7 @@ while true; do
 done
 
 while true; do
-    read -p "Install Webmin? " yn
+    read -rp "Install Webmin? " yn
     case $yn in
         [Yy]* ) install_webmin; break;;
         [Nn]* ) break;;
@@ -446,7 +447,7 @@ while true; do
 done
 
 while true; do
-    read -p "Add Python alias for Python3? " yn
+    read -rp "Add Python alias for Python3? " yn
     case $yn in
         [Yy]* ) python_alias; break;;
         [Nn]* ) break;;
@@ -456,7 +457,7 @@ done
 
 
 while true; do
-    read -p "Install zshell? " yn
+    read -rp "Install zshell? " yn
     case $yn in
         [Yy]* ) install_zshell; break;;
         [Nn]* ) break;;
