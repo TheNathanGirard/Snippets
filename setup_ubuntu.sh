@@ -3,6 +3,8 @@
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NC='\033[0m'
+strArchitecture=$(dpkg --print-architecture)
+
 
 if [ "$EUID" -ne 0 ]
   then echo "Please run as root"
@@ -304,18 +306,36 @@ install_docker () {
 	
 	apt update
 
-	apt install -y docker-ce docker-ce-cli containerd.io
-	# apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-
-	# git clone https://github.com/wagoodman/dive.git /tmp/dive
-	# cd /tmp/dive
-	# make
-	# cp ./dist/dive_linux_amd64/dive /usr/bin
+	apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin
 	
-#	wget https://github.com/wagoodman/dive/releases/download/v0.9.2/dive_0.9.2_linux_amd64.deb
-#	apt install ./dive_0.9.2_linux_amd64.deb
-#	rm dive_0.9.2_linux_amd64.deb
-#``	usermod -aG docker $USER
+	if [ "$strArchitecture" = "amd64" ]
+	then
+		curl -L -o /usr/local/bin/docker-compose https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64
+		chmod a+x /usr/local/bin/docker-compose
+	fi
+
+	if [ "$strArchitecture" = "arm64" ]
+	then
+		curl -L -o /usr/local/bin/docker-compose https://github.com/docker/compose/releases/latest/download/docker-compose-linux-aarch64
+		chmod a+x /usr/local/bin/docker-compose
+	fi
+
+	if [ "$strArchitecture" = "amd64" ]
+	then
+		DIVE_VERSION=$(curl -sL "https://api.github.com/repos/wagoodman/dive/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+		curl -L -o /tmp/dive_${DIVE_VERSION}_linux_amd64.deb https://github.com/wagoodman/dive/releases/download/v${DIVE_VERSION}/dive_${DIVE_VERSION}_linux_amd64.deb
+		apt install /tmp/dive_${DIVE_VERSION}_linux_amd64.deb
+		rm /tmp/dive_${DIVE_VERSION}_linux_amd64.deb
+	fi
+
+	if [ "$strArchitecture" = "arm64" ]
+	then
+		DIVE_VERSION=$(curl -sL "https://api.github.com/repos/wagoodman/dive/releases/latest" | grep '"tag_name":' | sed -E 's/.*"v([^"]+)".*/\1/')
+		curl -L -o /tmp/dive_${DIVE_VERSION}_linux_arm64.deb https://github.com/wagoodman/dive/releases/download/v${DIVE_VERSION}/dive_${DIVE_VERSION}_linux_arm64.deb
+		apt install /tmp/dive_${DIVE_VERSION}_linux_arm64.deb
+		rm /tmp/dive_${DIVE_VERSION}_linux_arm64.deb
+	fi
+
 }
 
 install_webmin () {
