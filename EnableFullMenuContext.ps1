@@ -15,4 +15,4 @@ if (-not (Test-Path $registryPath)) {
 }
 
 # Set the default value to empty string
-Set-ItemProperty -Path $registryPath -Name '(default)' -Value $valueData -Force
+Set-ItemProperty -Path $registryPath -Name $valueName -Value $valueData -Force
