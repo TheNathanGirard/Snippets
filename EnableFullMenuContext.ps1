@@ -1,6 +1,6 @@
 # Define the registry path and value name
-$registryPath = 'HKCU:\SOFTWARE\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}'
-$valueName = 'InprocServer32'
+$registryPath = 'HKCU:\SOFTWARE\Classes\CLSID\{86ca1aa0-34aa-4e8b-a509-50c905bae2a2}\InprocServer32'
+$valueName = ''
 $valueData = ''
 
 # Ensure all parent keys exist
@@ -15,4 +15,4 @@ if (-not (Test-Path $registryPath)) {
 }
 
 # Set the default value to empty string
-Set-ItemProperty -Path $registryPath -Name $valueName -Value $valueData -Force
+Set-ItemProperty -Path $registryPath -Name '(Default)' -Value $valueData -Force
