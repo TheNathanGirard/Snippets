@@ -3,29 +3,18 @@ $profiles = netsh wlan show profiles | Select-String "All User Profile" | ForEac
     ($_ -split ":")[1].Trim()
 }
 
-# Loop through each profile and remove ones starting with "GL-"
+# Define patterns to match for removal
+$patternsToRemove = @("GL-*", "tasmota*", "shelly*", "ITEAD*")
+
+# Loop through each profile and remove ones matching the specified patterns
 foreach ($profile in $profiles) {
-    # Write-Host $profile
-    if ($profile -like "GL-*") {
-        Write-Host "Removing Wi-Fi profile: $profile"
-        netsh wlan delete profile name="$profile"
+    foreach ($pattern in $patternsToRemove) {
+        if ($profile -like $pattern) {
+            Write-Host "Removing Wi-Fi profile: $profile"
+            netsh wlan delete profile name="$profile"
+            break
+        }
     }
-
-    if ($profile -like "tasmota*") {
-        Write-Host "Removing Wi-Fi profile: $profile"
-        netsh wlan delete profile name="$profile"
-    }
-
-    if ($profile -like "shelly*") {
-        Write-Host "Removing Wi-Fi profile: $profile"
-        netsh wlan delete profile name="$profile"
-    }
-    
-    if ($profile -like "ITEAD*") {
-        Write-Host "Removing Wi-Fi profile: $profile"
-        netsh wlan delete profile name="$profile"
-    }
-
 }
 
 Write-Host "Cleanup complete."
