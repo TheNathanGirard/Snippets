@@ -58,7 +58,7 @@ base_packages() {
 	timedatectl set-timezone America/Chicago
 	
 	#Add Universal Repo
-	add-apt-repository universe
+	add-apt-repository -y universe
 
 	#Update Snap Packages
 	snap refresh
