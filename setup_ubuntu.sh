@@ -266,8 +266,8 @@ harden_ssh () {
 	rm -v /etc/ssh/ssh_host_*
 	dpkg-reconfigure openssh-server
 	echo "KexAlgorithms curve25519-sha256@libssh.org,diffie-hellman-group16-sha512,diffie-hellman-group18-sha512,diffie-hellman-group14-sha256" | tee -a /etc/ssh/sshd_config
-	echo "HostKeyAlgorithms rsa-sha2-512,rsa-sha2-256,ssh-rsa,ssh-ed25519" | tee -a /etc/ssh/sshd_config
-	echo "MACs umac-128-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com,hmac-sha2-512" | tee -a /etc/ssh/sshd_config
+	echo "HostKeyAlgorithms rsa-sha2-256,ssh-ed25519" | tee -a /etc/ssh/sshd_config
+	echo "MACs umac-128-etm@openssh.com,hmac-sha2-256-etm@openssh.com,hmac-sha2-512-etm@openssh.com" | tee -a /etc/ssh/sshd_config
 
 	systemctl restart sshd
 
